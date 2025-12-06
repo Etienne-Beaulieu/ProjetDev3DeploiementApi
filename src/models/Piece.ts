@@ -93,4 +93,4 @@ const PieceSchema = new Schema<IPiece>({
   },
 });
 
-export const Piece = model<IPiece>('Piece', PieceSchema);
+export const Piece = model<IPiece>('Piece', PieceSchema, 'pieces');
