@@ -41,10 +41,6 @@ const pieceRouter = Router();
  *     responses:
  *       200:
  *         description: Liste de toutes les pièces
- *       401:
- *         description: Non autorisé - Token manquant
- *       403:
- *         description: Interdit - Token invalide
  */
 pieceRouter.get(Paths.Pieces.Get, PieceRoutes.getAll);
 
@@ -67,10 +63,6 @@ pieceRouter.get(Paths.Pieces.Get, PieceRoutes.getAll);
  *         description: Retourne la pièce demandée
  *       404:
  *         description: Pièce introuvable
- *       401:
- *         description: Non autorisé - Token manquant
- *       403:
- *         description: Interdit - Token invalide
  */
 pieceRouter.get(Paths.Pieces.GetOne, PieceRoutes.getOne);
 
@@ -91,10 +83,6 @@ pieceRouter.get(Paths.Pieces.GetOne, PieceRoutes.getOne);
  *     responses:
  *       200:
  *         description: Liste des pièces filtrées par statut du compositeur
- *       401:
- *         description: Non autorisé - Token manquant
- *       403:
- *         description: Interdit - Token invalide
  */
 pieceRouter.get(Paths.Pieces.GetIsAlive, PieceRoutes.getIsAlive);
 
@@ -120,10 +108,6 @@ pieceRouter.get(Paths.Pieces.GetIsAlive, PieceRoutes.getIsAlive);
  *     responses:
  *       200:
  *         description: Liste des pièces publiées entre les années spécifiées
- *       401:
- *         description: Non autorisé - Token manquant
- *       403:
- *         description: Interdit - Token invalide
  */
 pieceRouter.get(Paths.Pieces.GetBetweenYears, PieceRoutes.getBetweenYears);
 
@@ -147,10 +131,6 @@ pieceRouter.get(Paths.Pieces.GetBetweenYears, PieceRoutes.getBetweenYears);
  *     responses:
  *       201:
  *         description: Pièce créée avec succès
- *       401:
- *         description: Non autorisé - Token manquant
- *       403:
- *         description: Interdit - Token invalide
  */
 pieceRouter.post(Paths.Pieces.Add, validatePiece, PieceRoutes.add);
 
@@ -174,10 +154,6 @@ pieceRouter.post(Paths.Pieces.Add, validatePiece, PieceRoutes.add);
  *     responses:
  *       200:
  *         description: Pièce mise à jour avec succès
- *       401:
- *         description: Non autorisé - Token manquant
- *       403:
- *         description: Interdit - Token invalide
  */
 pieceRouter.put(Paths.Pieces.Update, PieceRoutes.update);
 
@@ -198,10 +174,6 @@ pieceRouter.put(Paths.Pieces.Update, PieceRoutes.update);
  *     responses:
  *       200:
  *         description: Pièce supprimée avec succès
- *       401:
- *         description: Non autorisé - Token manquant
- *       403:
- *         description: Interdit - Token invalide
  */
 pieceRouter.delete(Paths.Pieces.Delete, PieceRoutes.delete);
 
