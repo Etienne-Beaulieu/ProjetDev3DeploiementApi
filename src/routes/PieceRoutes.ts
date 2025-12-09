@@ -52,7 +52,8 @@ async function getBetweenYears(req: IReq, res: IRes) {
 async function add(req: IReq, res: IRes) {
   const { piece } = req.body;
   await PieceService.addOne(piece as IPiece);
-  res.status(HttpStatusCodes.CREATED).end();
+  // Retourne un json pour react
+  res.status(HttpStatusCodes.CREATED).json({ success: true });
 }
 
 /**
@@ -61,7 +62,8 @@ async function add(req: IReq, res: IRes) {
 async function update(req: IReq, res: IRes) {
   const { piece } = req.body;
   await PieceService.updateOne(piece as IPiece);
-  res.status(HttpStatusCodes.OK).end();
+  // Retourne un json pour react
+  res.status(HttpStatusCodes.OK).json({ success: true });
 }
 
 /**
@@ -69,8 +71,15 @@ async function update(req: IReq, res: IRes) {
  */
 async function delete_(req: IReq, res: IRes) {
   const { id } = req.params;
-  await PieceService.delete(id as string);
-  res.status(HttpStatusCodes.OK).end();
+
+  try {
+    await PieceService.delete(id as string);
+    // Retourne un json pour react
+    res.status(HttpStatusCodes.OK).json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, message: err.message });
+  }
 }
 
 export default {
