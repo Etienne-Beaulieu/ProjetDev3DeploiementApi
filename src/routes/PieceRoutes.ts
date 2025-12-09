@@ -1,5 +1,5 @@
 import HttpStatusCodes from '@src/common/constants/HttpStatusCodes';
-import PieceService from '../services/PieceService';
+import PieceService, { PIECE_NOT_FOUND_ERR } from '../services/PieceService';
 import { IPiece } from '../models/Piece';
 
 import { IReq, IRes } from './common/types';
@@ -76,9 +76,14 @@ async function delete_(req: IReq, res: IRes) {
     await PieceService.delete(id as string);
     // Retourne un json pour react
     res.status(HttpStatusCodes.OK).json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, message: err.message });
+  } catch (err: any) {
+    // Si la pièce n'existe pas
+    if (err.message === PIECE_NOT_FOUND_ERR) {
+      res.status(HttpStatusCodes.NOT_FOUND).json({ error: PIECE_NOT_FOUND_ERR });
+    } else {
+      // Autres erreurs
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
   }
 }
 

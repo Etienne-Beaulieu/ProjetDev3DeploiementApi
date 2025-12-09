@@ -98,11 +98,7 @@ describe('pieceRouter', () => {
   describe(`'GET:${Paths.Pieces.GetOne}'`, () => {
     it(`doit retourner un JSON avec une piece et un code ${HttpStatusCodes.OK} si réussi.`, async () => {
       const piece = DB_PIECES[0];
-      
-      // Utiliser findOne au lieu de findById (comme dans l'exemple auteur parce que si je change mon repo mon code brise et si j'utilise findById ça ne marche pas avec mock-mongoose)
-      // Préparer le simulacre de Mongoose
       mockify(Piece).toReturn(piece, 'findOne');
-      
       const path = Paths.Pieces.GetOne.replace(':id', piece._id!);
       const res: TRes<{ piece: IPiece }> = await agent.get(path);
       expect(res.status).toBe(HttpStatusCodes.OK);
@@ -130,6 +126,7 @@ describe('pieceRouter', () => {
       
       const res = await agent.post(Paths.Pieces.Add).send({ piece });
       expect(res.status).toBe(HttpStatusCodes.CREATED);
+      expect(res.body.success).toBe(true);
     });
 
     it(`doit retourner un JSON avec les erreurs et un code ${HttpStatusCodes.BAD_REQUEST} si un paramètre est manquant.`, async () => {
@@ -144,21 +141,16 @@ describe('pieceRouter', () => {
     it(`doit retourner un code ${HttpStatusCodes.OK} si la mise à jour est réussie.`, async () => {
       const piece = { ...DB_PIECES[0] };
       piece.pieceName = 'Updated Name';
-      
-      // Utiliser findOne au lieu de findById (comme dans l'exemple auteur parce que si je change mon repo mon code brise et si j'utilise findById ça ne marche pas avec mock-mongoose)
       mockify(Piece)
         .toReturn(piece, 'findOne')
         .toReturn(piece, 'save');
-      
       const res = await agent.put(Paths.Pieces.Update).send({ piece });
       expect(res.status).toBe(HttpStatusCodes.OK);
+      expect(res.body.success).toBe(true);
     });
 
     it(`doit retourner un JSON avec erreur '${PIECE_NOT_FOUND_ERR}' et un code ${HttpStatusCodes.NOT_FOUND} si l'id n'est pas trouvé.`, async () => {
-
-      // Préparer le simulacre de Mongoose
       mockify(Piece).toReturn(null, 'findOne');
-      
       const piece = { ...DB_PIECES[0], _id: '507f1f77bcf86cd799439099' };
       const res: TRes = await agent.put(Paths.Pieces.Update).send({ piece });
       expect(res.status).toBe(HttpStatusCodes.NOT_FOUND);
@@ -172,20 +164,16 @@ describe('pieceRouter', () => {
 
     it(`doit retourner un code ${HttpStatusCodes.OK} si la suppression est réussie.`, async () => {
       const piece = DB_PIECES[0];
-      
-      // Utiliser findOne au lieu de findById (comme dans l'exemple auteur parce que si je change mon repo mon code brise et si j'utilise findById ça ne marche pas avec mock-mongoose)
-      // Préparer le simulacre de Mongoose
       mockify(Piece)
         .toReturn(piece, 'findOne')
         .toReturn(piece, 'findOneAndRemove');
-      
       const res = await agent.delete(getPath(piece._id!));
       expect(res.status).toBe(HttpStatusCodes.OK);
+      expect(res.body.success).toBe(true);
     });
 
     it(`doit retourner un JSON avec erreur '${PIECE_NOT_FOUND_ERR}' et un code ${HttpStatusCodes.NOT_FOUND} si la piece est introuvable.`, async () => {
       mockify(Piece).toReturn(null, 'findOne');
-      
       const res: TRes = await agent.delete(getPath('507f1f77bcf86cd799439099'));
       expect(res.status).toBe(HttpStatusCodes.NOT_FOUND);
       expect(res.body.error).toBe(PIECE_NOT_FOUND_ERR);
